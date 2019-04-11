@@ -1,7 +1,10 @@
 # Embedded_Systems
-These are my implementations of 
-[Shape The World: Microcontroller Input/Output](https://www.edx.org/course/embedded-systems-shape-the-world-microcontroller-inputoutput)
-[Embedded Systems - Shape The World: Multi-Threaded Interfacing](https://www.edx.org/course/embedded-systems-shape-the-world-multi-threaded-interfacing)
+These are my lab solutions for the embedded systems course on EdX.
+This course is split into two parts:
+1. [Shape The World: Microcontroller Input/Output](https://www.edx.org/course/embedded-systems-shape-the-world-microcontroller-inputoutput)
+2. [Embedded Systems - Shape The World: Multi-Threaded Interfacing](https://www.edx.org/course/embedded-systems-shape-the-world-multi-threaded-interfacing)
+
+All the labs use an ARM Cortex-M Based TM4C123G LaunchPad. The ARM Keil uVision IDE is used to develop the software for these labs in C.
 # PART 1
 + Lab 2. Run existing project on LaunchPad with switch input and LED output
 
