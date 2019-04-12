@@ -11,6 +11,10 @@
 #include "Sound.h"
 #include "Piano.h"
 #include "TExaS.h"
+#include "DAC.h"
+
+const unsigned long Frequencies[4] = {2388, 2132, 1896, 1594};
+unsigned long key, prev_key;
 
 // basic functions defined at end of startup.s
 void DisableInterrupts(void); // Disable interrupts
@@ -23,12 +27,19 @@ int main(void){ // Real Lab13
 // PortE used for piano keys, PortB used for DAC        
   Sound_Init(); // initialize SysTick timer and DAC
   Piano_Init();
+	prev_key = 0;
   EnableInterrupts();  // enable after all initialization are done
   while(1){                
 // input from keys to select tone
-
-  }
-            
+		key = Piano_In();
+		if(key != prev_key){
+			if(key == 4) // Nothing pressed
+				Sound_Off();
+			else
+				Sound_Tone(Frequencies[key]);
+			prev_key = key;
+		}
+  }       
 }
 
 // Inputs: Number of msec to delay

@@ -4,7 +4,8 @@
 // original Space Invaders.
 // Jonathan Valvano
 // November 19, 2012
-
+#ifndef SOUND_H
+#define SOUND_H
 
 void Sound_Init(void);
 void Sound_Play(const unsigned char *pt, unsigned long count);
@@ -18,3 +19,4 @@ void Sound_Fastinvader3(void);
 void Sound_Fastinvader4(void);
 void Sound_Highpitch(void);
 
+#endif /*SOUND_H*/

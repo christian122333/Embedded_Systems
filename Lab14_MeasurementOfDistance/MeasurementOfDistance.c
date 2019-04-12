@@ -50,16 +50,23 @@ unsigned long Flag;       // 1 means valid Distance, 0 means Distance is empty
 // Input: sample  12-bit ADC sample
 // Output: 32-bit distance (resolution 0.001cm)
 unsigned long Convert(unsigned long sample){
-  return 0;  // replace this line with real code
+	Distance = ((500*ADCdata)>>10)+1;
+  return Distance;  // replace this line with real code
 }
 
 // Initialize SysTick interrupts to trigger at 40 Hz, 25 ms
 void SysTick_Init(unsigned long period){
-
+	NVIC_ST_CTRL_R = 0; // Disable SysTick during setup
+	NVIC_ST_RELOAD_R = period - 1; // Reload value
+	NVIC_ST_CURRENT_R = 0; // Any write to current clears it;
+	NVIC_SYS_PRI3_R = NVIC_SYS_PRI3_R&0x00FFFFFF; // Set priority to 0
+	NVIC_ST_CTRL_R |= 0x07;
 }
 // executes every 25 ms, collects a sample, converts and stores in mailbox
-void SysTick_Handler(void){ 
-
+void SysTick_Handler(void){
+		ADCdata = ADC0_In();
+		Distance = Convert(ADCdata);
+		Flag = 1;
 }
 
 //-----------------------UART_ConvertDistance-----------------------
@@ -75,7 +82,67 @@ void SysTick_Handler(void){
 //10000 to "*.*** cm"  any value larger than 9999 converted to "*.*** cm"
 void UART_ConvertDistance(unsigned long n){
 // as part of Lab 11 you implemented this function
-
+		if(n < 10){
+		String[0] = '0';
+		String[1] = '.';
+		String[2] = '0';
+		String[3] = '0';
+		String[4] = n + 0x30;
+		String[5] = ' ';
+		String[6] = 'c';
+		String[7] = 'm';
+		String[8] = '\0';
+	}
+	else if(n < 100){
+		String[0] = '0';
+		String[1] = '.';
+		String[2] = '0';
+		String[3] = (n/10) + 0x30;
+		n = n%10;
+		String[4] = n + 0x30;
+		String[5] = ' ';
+		String[6] = 'c';
+		String[7] = 'm';
+		String[8] = '\0';
+	}
+	else if(n < 1000){
+		String[0] = '0';
+		String[1] = '.';
+		String[2] = (n/100) + 0x30;
+		n = n%100;
+		String[3] = (n/10) + 0x30;
+		n = n%10;
+		String[4] = n + 0x30;
+		String[5] = ' ';
+		String[6] = 'c';
+		String[7] = 'm';
+		String[8] = '\0';
+	}
+	else if(n < 10000){
+		String[0] = (n/1000) + 0x30;
+		n = n%1000;
+		String[1] = '.';
+		String[2] = (n/100) + 0x30;
+		n = n%100;
+		String[3] = (n/10) + 0x30;
+		n = n%10;
+		String[4] = n + 0x30;
+		String[5] = ' ';
+		String[6] = 'c';
+		String[7] = 'm';
+		String[8] = '\0';
+	}	
+	else{
+		String[0] = '*';
+		String[1] = '.';
+		String[2] = '*';
+		String[3] = '*';
+		String[4] = '*';
+		String[5] = ' ';
+		String[6] = 'c';
+		String[7] = 'm';
+		String[8] = '\0';
+	}
 }
 
 // main1 is a simple main program allowing you to debug the ADC interface
@@ -92,13 +159,13 @@ int main2(void){
   TExaS_Init(ADC0_AIN1_PIN_PE2, SSI0_Real_Nokia5110_NoScope);
   ADC0_Init();    // initialize ADC0, channel 1, sequencer 3
   Nokia5110_Init();             // initialize Nokia5110 LCD
-  EnableInterrupts();
+	SysTick_Init(2000000);
+	EnableInterrupts();
   while(1){ 
-    ADCdata = ADC0_In();
-    Nokia5110_SetCursor(0, 0);
-    Distance = Convert(ADCdata);
-    UART_ConvertDistance(Distance); // from Lab 11
-    Nokia5110_OutString(String);    // output to Nokia5110 LCD (optional)
+   	Flag = 0x00;
+		while(!Flag){};	
+		Nokia5110_SetCursor(0, 0);
+		Nokia5110_OutString(String); 
   }
 }
 // once the ADC and convert to distance functions are operational,
@@ -110,12 +177,19 @@ int main(void){
 // initialize Nokia5110 LCD (optional)
 // initialize SysTick for 40 Hz interrupts
 // initialize profiling on PF1 (optional)
-                                    //    wait for clock to stabilize
-
+//    wait for clock to stabilize 
+	ADC0_Init();
+  Nokia5110_Init();
+	SysTick_Init(2000000);
   EnableInterrupts();
 // print a welcome message  (optional)
   while(1){ 
 // read mailbox
 // output to Nokia5110 LCD (optional)
+		Flag = 0;
+		while(!Flag){};	
+		Nokia5110_SetCursor(0, 0);
+		UART_ConvertDistance(Distance);
+		Nokia5110_OutString(String); 
   }
 }

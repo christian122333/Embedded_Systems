@@ -1,9 +1,9 @@
-<h1>CC3100GetWeather_4C123 Example</h1>
+<h1>Lab 16 Starter Project</h1>
 
 <!--##### README BEGIN #####-->
 Simple starter file
 This application will fetch weather data from openweathermap.org
-It will request weather by sending "GET /data/2.5/weather?q=Austin%20Texas&units=metric HTTP/1.1\r\nUser-Agent: Keil\r\nHost:api.openweathermap.org\r\nAccept: */*\r\n\r\n"
+It will request weather, but you will change it into Lab 16 
 
 With all the buzz about the Internet of Things (IoT), we all have considered adding wireless connectivity to our embedded system lab. However, a flood of worries may hold us back, such as cost, complexity, and inertia.  This example explains to create a smart object.
 
@@ -11,14 +11,15 @@ Why. With the proliferation of embedded systems and the pervasiveness of the int
 
 Pedagogical Shift. I am a strong advocate of bottom-up education, which means we start with the basics, teach a topic until the student has full grasp, and then encapsulate and use that topic as we move to teach a higher-level topic. In order to connect to the internet, our device must implement a plethora of details to be fully compatible. The only way to add wireless to an existing embedded system lab is to violate the bottom up rule “students must understand everything about the devices they use” and provide them a working “black box” with which they can experiment. More specifically, we will purchase a hardware/software solution (called an internet stack) that is internet ready, and we will provide a rich set of example solutions to teach how the internet works at the component level. Students will modify and combine these examples to design systems. This purchase-and-use design process is prevalent in industry, so it will be beneficial for students to be exposed to both bottom-up and component-level design processes.
 
-How. The approach for implementing a smart object over wifi is to begin with a hardware/software platform that implements IEEE801.11 wifi. The CC3100BOOST is a boosterpack that can be used with the MSP430 LaunchPad, the MSP432 LaunchPad, the TM4C123 LaunchPad, the TM4C1294 LaunchPad, or with a CC31XXEMUBOOST emulation module. The CC3100BOOST implements the internet stack with a combination of hardware and software components. Software in the LaunchPad preforms system calls to the CC3100BOOST to affect wireless communication. I didn’t use the CC31XXEMUBOOST emulation module because I didn’t want or need to reprogram the CC3100 boosterpack. In this example student use one EK-TM4C123-GXL LaunchPad that fetches weather data from the internet
+How. The approach for implementing a smart object over wifi is to begin with a hardware/software platform that implements IEEE801.11 wifi. The CC3100BOOST is a boosterpack that can be used with the MSP430 LaunchPad, the TM4C123 LaunchPad, the TM4C1294 LaunchPad, or with a CC31XXEMUBOOST emulation module. The CC3100BOOST implements the internet stack with a combination of hardware and software components. Software in the LaunchPad preforms system calls to the CC3100BOOST to affect wireless communication. I didn’t use the CC31XXEMUBOOST emulation module because I didn’t want or need to reprogram the CC3100 boosterpack. In this example student use one EK-TM4C123-GXL LaunchPad that fetches weather data from the internet
 
-\ValvanoWareTM4C123
-  CC3100GetWeather_4C123
+Keil\Labware
+  C16_getWeather
   CC3100
   CC3100_docs
   driverlib
   inc
+  Lab16_IoT
   utils
 
 
@@ -40,9 +41,39 @@ If it doesn't work, use the debugger to see where it is stuck.
 The second set of changes changing "Austin Texas" to your city, 
 and if you wish you can change "metric" to "imperial"
 
-For more information see Chapter 11 in Embedded Systems: Real-Time Interfacing to ARM Cortex-M Microcontrollers, 2015, ISBN: 978-1463590154, http://users.ece.utexas.edu/~valvano/arm/outline.htm 
+This is a copy of the getWeather project, that you will change into Lab 16
+ 1) Change the server address to embsysmooc.appspot.com
+ 2) Change the three strings City Temperature Weather to Id Score Edxpost
+ 3) Set your SSID_NAME SEC_TYPE PASSKEY to match your access point
+ 4) Set the REQUEST string to
+    GET /query?city=Austin%20Texas&id=Jon%20Valvano&greet=Lab%2016%20is%20fun.&edxcode=2729 HTTP/1.1\r\nUser-Agent: Keil\r\nHost: embsysmooc.appspot.com\r\n\r\n
+    changing Austin%20Texas to your city
+    changing Jon%20Valvano to your name, pseudoname, piazza handle, or anonymous
+    changing greet (Lab is is fun.) to a message you wish to send to your classmates
+    changing the edxcode to the 4 digit number from edX Lab 16 grading page
+ 5) Edit getweather function 
+    a) Change the name of getweather function so something more descriptive
+    b) search for "id" and fill Id array ID
+    c) search for "score" and fill Score array
+    d) search for "edxpost" and exactly 8 characters into Edxpost array after the "edxpost":
+ 6) Change the main program to display three strings Id Score Edxpost instead of City Temperature Weather
+ 7) Look at http://embsysmooc.appspot.com/
+ 
+*****************************EXAMPLE return string***************
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Cache-Control: no-cache
+Date: Tue, 24 Feb 2015 15:23:08 GMT
+Server: Google Frontend
+Content-Length: 126
+Alternate-Protocol: 80:quic,p=0.08
 
-Jonathan Valvano 9/13/2015
+<html><body><pre>{"id":"jon_valvano", "greet":"GoodJob", "edxcode":3222, "score":100, "edxpost":JiPigAmk
+*****************************End if EXAMPLE return string***********
+
+For more information see Chapter 11 in Embedded Systems: Real-Time Interfacing to ARM Cortex-M Microcontrollers, 2014, ISBN: 978-1463590154, http://users.ece.utexas.edu/~valvano/arm/outline.htm 
+
+Jonathan Valvano 3/11/2015
 <!--##### README END #####-->
 
 

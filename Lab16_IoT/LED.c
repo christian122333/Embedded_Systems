@@ -7,7 +7,7 @@
 // Daniel and Jonathan Valvano
 // Feb 23, 2015
 #include <stdint.h>
-#include "../inc/tm4c123gh6pm.h"
+#include "inc/tm4c123gh6pm.h"
 
 /* This example accompanies the book
    "Embedded Systems: Introduction to ARM Cortex M Microcontrollers",

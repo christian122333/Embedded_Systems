@@ -13,8 +13,16 @@
 // Initialize 4-bit DAC 
 // Input: none
 // Output: none
-void DAC_Init(void){
-
+void DAC_Init(void){ volatile unsigned long delay;
+	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOB; // Enable clock for PortB
+	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOD; 
+	delay = SYSCTL_RCGC2_R;
+	GPIO_PORTB_AMSEL_R &= ~0x0F; // Clear AMSEL
+	GPIO_PORTB_PCTL_R &= ~0x0000FFFF;  // Clear PCTL
+	GPIO_PORTB_DIR_R |= 0x0F;  // PB0-3 out
+	GPIO_PORTB_AFSEL_R &= ~0x0F; // Clear AFSEL
+	GPIO_PORTB_DR8R_R |= 0x0F; // can drive up to 8mA out
+	GPIO_PORTB_DEN_R |= 0x0F; // Enable digital
 }
 
 
@@ -23,5 +31,5 @@ void DAC_Init(void){
 // Input: 4-bit data, 0 to 15 
 // Output: none
 void DAC_Out(unsigned long data){
-  
+  GPIO_PORTB_DATA_R = data;
 }

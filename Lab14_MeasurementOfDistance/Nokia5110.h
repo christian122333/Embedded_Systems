@@ -56,7 +56,7 @@
 // Contrast value 0xBF looks good on red SparkFun
 // and 0xB8 looks good on blue Nokia 5110.
 // Adjust this from 0xA0 (lighter) to 0xCF (darker) for your display.
-#define CONTRAST                0xBF
+#define CONTRAST                0xB8
 
 //********Nokia5110_Init*****************
 // Initialize Nokia 5110 48x84 LCD by sending the proper

@@ -43,21 +43,18 @@ void EnableInterrupts(void);  // Enable interrupts
 void WaitForInterrupt(void);  // low power mode
 
 // input from PA3, output from PA2, SysTick interrupts
-void Sound_Init(void){ 
+void Sound_Init(void){ volatile unsigned long delay;
 	unsigned long period = 90909;
-	SYSCTL_RCGC2_R |= 0x02;
+	SYSCTL_RCGC2_R |= 0x00000001;
+	delay = SYSCTL_RCGC2_R;
 	GPIO_PORTA_AMSEL_R &= ~0x0C; // Clear AMSEL
-	GPIO_PORTA_PCTL_R &= ~0x0C; // Clear PCTL
+	GPIO_PORTA_PCTL_R &= ~0x0000FF00;  // Clear PCTL
 	GPIO_PORTA_DIR_R |= 0x04;  // PA2 is out
+	GPIO_PORTA_PDR_R |= 0x08; // pull down
+	GPIO_PORTA_DR8R_R |= 0x04;  // can drive up to 8mA out
 	GPIO_PORTA_AFSEL_R &= ~0x0C; // Clear AFSEL
 	GPIO_PORTA_DEN_R |= 0x0C; // Enable digital
 	GPIO_PORTA_DATA_R &= ~0x04; //PA2 set to low;
-	
-	GPIO_PORTA_IS_R &= ~0x08;
-	GPIO_PORTA_IBE_R &= ~0x08;
-	GPIO_PORTA_IEV_R |= 0x08; // Rising edge
-	GPIO_PORTA_ICR_R = 0x08;
-	GPIO_PORTA_IM_R |= 0x08;
 	
 	NVIC_ST_CTRL_R = 0; // Disable SysTick during setup
 	NVIC_ST_RELOAD_R =  period - 1; // Reload value 
@@ -70,19 +67,22 @@ void Sound_Init(void){
 // called at 880 Hz
 void SysTick_Handler(void){
 	if(GPIO_PORTA_DATA_R&0x08){ // Switch is pressed
-		if(prev)
-			prev = 0x00;
-		else
-			prev = 0x01;
-		if(toggle){
-			toggle = 0x00;
-			GPIO_PORTA_DATA_R &= ~0x04;
+		if(!prev){
+			if(toggle){
+				toggle = 0x00;
+				GPIO_PORTA_DATA_R &= ~0x04;
+			}
+			else{
+				toggle = 0x01;
+			}
 		}
-		else		
-			toggle = 0x01;
+		prev = 0x01;
+	}
+	else{	// Switch is not pressed
+		prev = 0x00;
 	}
 
-	if(toggle || prev){
+	if(toggle){
 			if(GPIO_PORTA_DATA_R&0x04){ // toggle PA3
 				GPIO_PORTA_DATA_R &= ~0x04;
 			}
