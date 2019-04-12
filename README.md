@@ -4,8 +4,8 @@ This course is split into two parts:
 1. [Shape The World: Microcontroller Input/Output](https://www.edx.org/course/embedded-systems-shape-the-world-microcontroller-inputoutput)
 2. [Embedded Systems - Shape The World: Multi-Threaded Interfacing](https://www.edx.org/course/embedded-systems-shape-the-world-multi-threaded-interfacing)
 
-All the labs use an ARM Cortex-M Based TM4C123G LaunchPad. The ARM Keil uVision IDE is used to develop the software for these labs in C.
-![Space Invaders](webwxgetmsgimg.jpg "Space Invaders")
+All the labs use an ARM Cortex-M Based TM4C123G LaunchPad. The ARM Keil uVision IDE is used to develop the software for these labs in C. The image below shows the complete project for lab 15 in making video game.
+<img src="webwxgetmsgimg.jpg" width="720" height="540">
 # PART 1
 + Lab 2. Run existing project on LaunchPad with switch input and LED output
 
